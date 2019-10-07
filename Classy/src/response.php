@@ -2,9 +2,11 @@
 
 class Response {
 
-    public function send() {
+    public function send(string $body, int $status=200) {
 
-        echo 'Coucou !';
+        http_response_code($status);
+        header('Content-type: text/plain');
+        echo $body;
 
     }
 }
