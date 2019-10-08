@@ -1,11 +1,40 @@
 <?php
 
-require_once SRC_DIR.'/AnnonceLoader.php';
+require_once SRC_DIR . '/DatabaseConnexion.php';
+require_once SRC_DIR . '/Annonce.php';
 
 class AnnonceLoader
 {
-    public function load(int $id):Annonce
+
+    private $connexion;
+
+    public function __construct(DatabaseConnexion $connexion)
     {
-        return new Annonce();
+
+        $connexion->connect();
+
+        $this->connexion = $connexion->getPdo();
     }
+
+    public function load(int $id): Annonce
+    {
+
+        $statement = $this->connexion->prepare(
+
+            'SELECT id, title, content, publishedAt FROM Annonce WHERE id=:id'
+
+        );
+
+        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+
+        $statement->execute();
+
+        $annonce = $statement->fetchObject(Annonce::class);
+
+        var_dump($annonce);
+
+        return $annonce;
+
+    }
+
 }
