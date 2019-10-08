@@ -1,0 +1,7 @@
+{
+    "dsn": "mysql:host=hostname;dbname=dbname",
+
+    "username": "name",
+
+    "password": "pwd"
+}
