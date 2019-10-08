@@ -1,10 +1,11 @@
 <?php
 
+require_once SRC_DIR.'/response.php';
 
 class UrlReader
 {
 
-    public function parse()
+    public function parse(): int
     {
 
         // découpe de l'url sur les "/"
@@ -18,7 +19,7 @@ class UrlReader
         throw new Exception('URL non reconnue !');
     }
 
-    private function match(array $parts)
+    private function match(array $parts): bool
     {
 
     // url de la form "annonce/<numero>"?

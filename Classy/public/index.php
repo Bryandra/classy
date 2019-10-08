@@ -1,22 +1,11 @@
 <?php
 
-require_once '../src/response.php';
-require_once '../src/UrlReader.php';
+define('SRC_DIR', __DIR__.'/../src');
 
-// regarder dans l'url
-$reader = new UrlReader();
+require_once SRC_DIR.'/application.php';
 
-//  TODO : mettre la construction de la réponse dans une classe
-try {
+$app = new Application();
 
-    $id = $reader->parse();
+$response = $app->run();
 
-    $response = new Response('Cette page existe !');
-
-} catch (Exception $e) {
-
-    $response = new Response('Cette page n\'existe pas !', 404);
-
-}
-
-$response->send(); 
+$response->send();
