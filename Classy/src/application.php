@@ -2,6 +2,7 @@
 
 require_once SRC_DIR.'/UrlReader.php';
 require_once SRC_DIR.'/response.php';
+require_once SRC_DIR.'/AnnonceLoader.php';
 
 class Application {
 
@@ -13,7 +14,8 @@ class Application {
     try {
 
         $id = $reader->parse();
-
+        $loader = new AnnonceLoader();
+        $annonce = $loader->load($id);
         $response = new Response('Cette page existe !');
 
     } catch (Exception $e) {
