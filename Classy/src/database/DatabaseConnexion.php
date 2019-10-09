@@ -1,5 +1,7 @@
 <?php
 
+namespace App\database;
+
 class DatabaseConnexion
 {
 
@@ -16,17 +18,19 @@ class DatabaseConnexion
         $this->password = $password;
     }
 
-    public function connect()
+    private function connect()
     {
 
-        $this->pdo = new PDO($this->dsn, $this->username, $this->password);
-        var_dump($this->pdo->errorInfo());
+        $this->pdo = new \PDO($this->dsn, $this->username, $this->password);
 
     }
 
-    public function getPdo()
+    public function getPdo(): \PDO
     {
 
+        if (!$this->pdo) {
+            $this->connect();
+        }
         return $this->pdo;
     }
 }

@@ -1,10 +1,8 @@
 <?php
 
-define('SRC_DIR', __DIR__.'/../src');
+require __DIR__.'/../vendor/autoload.php';
 
-require_once SRC_DIR.'/application.php';
-
-$app = new Application();
+$app = new App\Application();
 
 $response = $app->run();
 

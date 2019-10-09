@@ -1,7 +1,9 @@
 <?php
 
-require_once SRC_DIR . '/DatabaseConnexion.php';
-require_once SRC_DIR . '/Annonce.php';
+namespace App\database;
+
+use App\Exception\NotFoundException;
+use App\Annonce;
 
 class AnnonceLoader
 {
@@ -10,9 +12,6 @@ class AnnonceLoader
 
     public function __construct(DatabaseConnexion $connexion)
     {
-
-        $connexion->connect();
-
         $this->connexion = $connexion->getPdo();
     }
 
@@ -21,17 +20,19 @@ class AnnonceLoader
 
         $statement = $this->connexion->prepare(
 
-            'SELECT id, title, content, publishedAt FROM Annonce WHERE id=:id'
+            'SELECT id, title, content, publishedAt FROM annonce WHERE id=:id'
 
         );
 
-        $statement->bindValue(':id', $id, PDO::PARAM_INT);
+        $statement->bindValue(':id', $id, \PDO::PARAM_INT);
 
         $statement->execute();
 
         $annonce = $statement->fetchObject(Annonce::class);
 
-        var_dump($annonce);
+        if (!$annonce) {
+            throw new NotFoundException('Cette annonce n\'existe pas !');
+        }
 
         return $annonce;
 

@@ -1,8 +1,11 @@
 <?php
 
-require_once SRC_DIR . '/UrlReader.php';
-require_once SRC_DIR . '/response.php';
-require_once SRC_DIR . '/AnnonceLoader.php';
+namespace App;
+
+use App\database\DatabaseConnexion;
+use App\database\AnnonceLoader;
+use App\Exception\NotFoundException;
+use App\html\Annonce as AnnonceHtml;
 
 class Application
 {
@@ -10,7 +13,7 @@ class Application
     public function run(): Response
     {
 
-        $config = json_decode(file_get_contents(SRC_DIR . '/../config/database.json'));
+        $config = json_decode(file_get_contents(__DIR__ . '/../config/database.json'));
 
         $connexion = new DatabaseConnexion(
 
@@ -27,10 +30,13 @@ class Application
             $id = $reader->parse();
             $loader = new AnnonceLoader($connexion);
             $annonce = $loader->load($id);
-            $response = new Response('Cette page existe !');
-        } catch (Exception $e) {
+            $annonceHtml = new AnnonceHtml();
+            $response = new Response($annonceHtml->build($annonce));
 
-            $response = new Response('Cette page n\'existe pas !', 404);
+        } catch (NotFoundException $e) {
+
+            $response = new Response($e->getMessage(), 404);
+
         }
 
         return $response;

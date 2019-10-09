@@ -1,6 +1,8 @@
 <?php
 
-require_once SRC_DIR.'/response.php';
+namespace App;
+
+use App\Exception\NotFoundException;
 
 class UrlReader
 {
@@ -12,11 +14,11 @@ class UrlReader
         $uriParts =  explode('/', trim($_SERVER['REQUEST_URI'], '/'));
 
         if ($this->match($uriParts)) {
-            return $uriParts[1];
+            return intval($uriParts[1]);
         }
 
         // pas de format d'url trouvée
-        throw new Exception('URL non reconnue !');
+        throw new \NotFoundException('URL non reconnue !');
     }
 
     private function match(array $parts): bool
