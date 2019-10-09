@@ -27,11 +27,13 @@ class Application
 
         try {
 
-            $id = $reader->parse();
-            $loader = new AnnonceLoader($connexion);
-            $annonce = $loader->load($id);
-            $annonceHtml = new AnnonceHtml();
-            $response = new Response($annonceHtml->build($annonce));
+            $config = $reader->parse();
+            $controller = new Controller($connection);
+            $response = call_user_func_array(
+                [$controller, $config->getMethod()],
+                $config->getArgs()
+            );
+
 
         } catch (NotFoundException $e) {
 
