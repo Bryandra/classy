@@ -37,5 +37,25 @@ class AnnonceLoader
         return $annonce;
 
     }
+    public function loadAll()
+    {
+
+        $statement = $this->connexion->prepare(
+
+            'SELECT id, title, content, publishedAt FROM annonce'
+
+        );
+
+        $statement->execute();
+
+        $annonces = $statement->fetchAll(\PDO::FETCH_CLASS, Annonce::class);
+
+        if (!$annonces) {
+            throw new NotFoundException('Cette annonce n\'existe pas !');
+        }
+
+        return $annonces;
+
+    }
 
 }

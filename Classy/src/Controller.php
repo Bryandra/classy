@@ -3,27 +3,45 @@
 
 namespace App;
 
-
+use App\html\Annonce as AnnonceHtml;
+use App\database\AnnonceLoader;
 use App\database\DatabaseConnexion;
 
 class Controller
 {
+    /**
+     * @var \App\html\Annonce
+     */
+    private $annonceHtml;
+    /**
+     * @var \App\database\AnnonceLoader
+     */
+    private $loader;
 
     public function __construct(DatabaseConnexion $connection)
     {
-        $this->connection = $connection;
+        $this->loader = new AnnonceLoader($connection);
+        $this->annonceHtml = new AnnonceHtml();
     }
 
     public function index()
     {
-        echo 'Je suis dans index';
+        $annonces = $this->loader->loadAll();
+        return new Response($this->annonceHtml->loadTemplate(
+            '/templates/index.phtml', [
+            'annonces' => $annonces,
+                ]
+        ));
     }
 
     public function show(int $id): Response
     {
-        $loader = new AnnonceLoader($this->connection);
-        $annonce = $loader->load($id);
-        $annonceHtml = new AnnonceHtml();
-        return new Response($annonceHtml->build($annonce));
+
+        $annonce = $this->loader->load($id);
+        return new Response($this->annonceHtml->loadTemplate(
+            '/templates/annonce.phtml', [
+                'annonce' => $annonce,
+            ]
+        ));
     }
 }

@@ -8,8 +8,10 @@
 </head>
 
 <body>
+<?php foreach ($data['annonces'] as $annonce){?>
 
 <h1><?= $annonce->title ?></h1><div><?= $annonce->content ?></div>
 
+<?php } ?>
 </body>
 </html>

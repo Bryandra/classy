@@ -28,7 +28,7 @@ class Application
         try {
 
             $config = $reader->parse();
-            $controller = new Controller($connection);
+            $controller = new Controller($connexion);
             $response = call_user_func_array(
                 [$controller, $config->getMethod()],
                 $config->getArgs()
